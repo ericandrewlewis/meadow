@@ -1,4 +1,28 @@
 <?php
+
+/**
+ * This class encapsulates functionality of "registered" post meta data.
+ *
+ * Currently optimizing for logical readability, unclear on the memory footprint.
+ */
+class Meadow_Postmeta {
+	function __construct( $args ) {
+		/*
+		 * Use the built-in API to "register" meta,
+		 * i.e. set sanitization and authorization callbacks on the right filters.
+		 */
+		register_meta(
+			'post',
+			$args['key'],
+			$args['sanitization_callback'],
+			$args['authentication_callback']
+		);
+		foreach ( $args as $key => $val ) {
+			$this->$key = $val;
+		}
+	}
+}
+
 /**
  * Add form UI in the after title location.
  */
@@ -10,7 +34,7 @@ add_action( 'edit_form_after_title', function() {
 	}
 	$metas = $store->get_meta()['post'][$post->post_type];
 	foreach ( $metas as $meta ) {
-		if ( $meta['edit_post_location'] !== 'under_title' ) {
+		if ( $meta->edit_post_location !== 'under_title' ) {
 			return;
 		}
 		$value = get_post_meta( $post->ID, $meta['key'], true );
@@ -33,7 +57,7 @@ add_action( 'post_submitbox_misc_actions', function() {
 	}
 	$metas = $store->get_meta()['post'][$post->post_type];
 	foreach ( $metas as $meta ) {
-		if ( $meta['edit_post_location'] !== 'post_submitbox_misc_actions' ) {
+		if ( $meta->edit_post_location !== 'post_submitbox_misc_actions' ) {
 			return;
 		}
 		$value = get_post_meta( $post->ID, $meta['key'], true );
@@ -63,9 +87,9 @@ add_action( 'save_post', function() {
 	}
 	$metas = $store->get_meta()['post'][$post->post_type];
 	foreach ( $metas as $meta ) {
-		if ( isset( $_REQUEST['custom_field_' . $meta['key']] ) ) {
-			$value = $_REQUEST['custom_field_' . $meta['key']];
-			update_post_meta( $post->ID, $meta['key'], $value );
+		if ( isset( $_REQUEST['custom_field_' . $meta->key] ) ) {
+			$value = $_REQUEST['custom_field_' . $meta->key];
+			update_post_meta( $post->ID, $meta->key, $value );
 		}
 	}
 });
@@ -81,13 +105,13 @@ function meadow_output_metabox_contents() {
 	}
 	$metas = $store->get_meta()['post'][$post->post_type];
 	foreach ( $metas as $meta ) {
-		if ( $meta['edit_post_location'] !== 'metabox' ) {
+		if ( $meta->edit_post_location !== 'metabox' ) {
 			return;
 		}
-		$value = get_post_meta( $post->ID, $meta['key'], true );
-		?><label><h3 class="custom-field-label"><?php echo $meta['label'] ?></h3><?php
-		if ( $meta['type'] === 'text' ) {
-			?><input type="text" name="<?php echo 'custom_field_' . $meta['key'] ?>" value="<?php echo $value ?>"><?php
+		$value = get_post_meta( $post->ID, $meta->key, true );
+		?><label><h3 class="custom-field-label"><?php echo $meta->label ?></h3><?php
+		if ( $meta->type === 'text' ) {
+			?><input type="text" name="<?php echo 'custom_field_' . $meta->key ?>" value="<?php echo $value ?>"><?php
 		}
 		?></label><?php
 	}

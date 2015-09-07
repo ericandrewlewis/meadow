@@ -1,4 +1,5 @@
 <?php
+function __noop() {}
 /**
  * A fallthrough helper for skipping sanitization.
  *

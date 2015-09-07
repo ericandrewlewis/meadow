@@ -8,7 +8,8 @@ meadow_register_meta(
 		 * Narrow down from there based on the respective schemas.
 		 * Open up lower-level filters for more granular control.
 		 */
-		'asset_type' => 'post:attachment',
+		'asset_type' => 'post',
+		'post_type' => 'attachment',
 		// The key of the meta data.
 		'key' => 'credit',
 		/*

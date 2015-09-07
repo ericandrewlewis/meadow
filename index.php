@@ -12,9 +12,11 @@ require( 'library/functions.php' );
 // Library code for asset types
 require( 'library/attachment.php' );
 require( 'library/post.php' );
+require( 'library/option.php' );
 
 $include_examples = true;
 if ( $include_examples ) {
 	require( 'examples/attachment.php' );
 	require( 'examples/post.php' );
+	require( 'examples/option.php' );
 }

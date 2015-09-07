@@ -11,11 +11,11 @@ add_filter( 'attachment_fields_to_edit', function( $form_fields, $post ) {
 		return;
 	}
 	foreach ( $metas as $meta ) {
-		$value = get_post_meta( $post->ID, $meta['key'], true );
+		$value = get_post_meta( $post->ID, $meta->key, true );
 		// Namespace the field name to avoid any collisions with existing fields.
-		$form_fields['custom_field_' . $meta['key']] = array(
+		$form_fields['custom_field_' . $meta->key] = array(
 			'value' => $value,
-			'label' => $meta['label'],
+			'label' => $meta->label,
 			// todo think about this:
 			'helps' => __( 'Person who took the picture' )
 		);
@@ -33,9 +33,9 @@ add_action( 'edit_attachment', function( $attachment_id ) {
 		return;
 	}
 	foreach ( $metas as $meta ) {
-		if ( isset( $_REQUEST['attachments'][$attachment_id]['custom_field_' . $meta['key']] ) ) {
-			$value = $_REQUEST['attachments'][$attachment_id]['custom_field_' . $meta['key']];
-			update_post_meta( $attachment_id, $meta['key'], $value );
+		if ( isset( $_REQUEST['attachments'][$attachment_id]['custom_field_' . $meta->key] ) ) {
+			$value = $_REQUEST['attachments'][$attachment_id]['custom_field_' . $meta->key];
+			update_post_meta( $attachment_id, $meta->key, $value );
 		}
 	}
 

@@ -27,10 +27,8 @@ class Meadow_Metadata_Store {
 	 * Register any meta. This makes
 	 */
 	public function register_meta( $args ) {
-		$args['asset_type_exploded'] = explode( ':', $args['asset_type'] );
-		$asset_type = $args['asset_type_exploded'][0];
 		// Call the asset-type specific registration routine.
-		call_user_func( array( $this, 'register_' . $asset_type . '_meta' ), $args );
+		call_user_func( array( $this, 'register_' . $args['asset_type'] . '_meta' ), $args );
 	}
 
 	/**
@@ -44,14 +42,17 @@ class Meadow_Metadata_Store {
 	 * Register postmeta for any post type.
 	 */
 	private function register_post_meta( $args ) {
-		register_meta(
-			'post',
-			$args['key'],
-			$args['sanitization_callback'],
-			$args['authentication_callback']
-		);
-		$post_type = $args['asset_type_exploded'][1];
-		// Store the meta for display by UI.
-		$this->meta['post'][$post_type][] = $args;
+		$meta = new Meadow_Postmeta( $args );
+		// Store the meta for display by UI and to describe to external APIs.
+		$this->meta['post'][$meta->post_type][] = $meta;
+	}
+
+	/**
+	 * Register an option.
+	 */
+	private function register_option_meta( $args ) {
+		$meta = new Meadow_Option( $args );
+		// Store the meta for display by UI and to describe to external APIs.
+		$this->meta['option'][] = $meta;
 	}
 }
