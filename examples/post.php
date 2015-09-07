@@ -1,9 +1,4 @@
 <?php
-/**
- * Register a bunch of example metadata.
- */
-
-
 meadow_register_meta(
 	array(
 		/*
