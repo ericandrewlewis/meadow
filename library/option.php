@@ -11,27 +11,43 @@ class Meadow_Option {
 			$this->$key = $val;
 		}
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		new Meadow_Option_UI_Control( array( 'meta' => $this ) );
 	}
 
 	public function admin_init() {
-		// This whitelists the setting so it's automatically saved by settings page form handlers.
-		register_setting( $this->section, $this->key );
-
-		add_settings_field(
-			$this->key,
-			'Example setting Name',
-			'hi',
-			$this->page,
-			$this->section
-		);
+		// Register the sanitize callback manually rather than using register_setting(),
+		// because that function also describes how wp-admin ui should work, which is
+		// aagainst our intended separation of concerns.
+		if ( $this->sanitization_callback != '' )
+			add_filter( "sanitize_option_{$this->key}", $this->sanitization_callback );
 	}
 }
 
-/**
- * Just say *something*.
- *
- * @return [type] [description]
- */
-function hi() {
-	echo 'hi';
+class Meadow_Option_UI_Control {
+	function __construct($args) {
+		$this->meta = $args['meta'];
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+	}
+
+	public function admin_init() {
+		global $new_whitelist_options;
+		$new_whitelist_options[ $this->meta->section ][] = $this->meta->key;
+
+		// register_setting( $this->meta->section, $this->meta->key );
+		// Add the thing that will output the field in the Settings page form.
+		add_settings_field(
+			$this->meta->key,
+			$this->meta->label,
+			array( $this, 'render' ),
+			$this->meta->page,
+			$this->meta->section
+		);
+	}
+
+	public function render() {
+		$value = get_option( $this->meta->key );
+		if ( $this->meta->type === 'text' ) {
+			?><input type="text" name="<?php echo $this->meta->key ?>" value="<?php esc_attr( $value ) ?>"><?php
+		}
+	}
 }

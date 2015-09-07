@@ -6,7 +6,7 @@ function __noop() {}
  * @param mixed $arg
  * @return mixed
  */
-function __return_first_arg( $arg ) {
+function __noop_sanitizer( $arg ) {
 	return $arg;
 }
 

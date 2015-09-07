@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This class encapsulates functionality of "registered" post meta data.
+ * This class encapsulates the "registered" post meta data.
  *
  * Currently optimizing for logical readability, unclear on the memory footprint.
  */
@@ -20,116 +20,59 @@ class Meadow_Postmeta {
 		foreach ( $args as $key => $val ) {
 			$this->$key = $val;
 		}
+		if ( $this->post_type === 'attachment' ) {
+			new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $this ) );
+		} else {
+			new Meadow_Postmeta_UI_Control( array( 'meta' => $this ) );
+		}
+
 	}
 }
 
 /**
- * Add form UI in the after title location.
+ * Set up a UI control for a piece of postmeta inside the wp-admin
+ * application.
  */
-add_action( 'edit_form_after_title', function() {
-	$post = get_post();
-	$store = Meadow_Metadata_Store::getInstance();
-	if ( empty( $store->get_meta()['post'][$post->post_type] ) ) {
-		return;
-	}
-	$metas = $store->get_meta()['post'][$post->post_type];
-	foreach ( $metas as $meta ) {
-		if ( $meta->edit_post_location !== 'under_title' ) {
-			return;
+class Meadow_Postmeta_UI_Control {
+	function __construct($args) {
+		$this->meta = $args['meta'];
+		if ( $this->meta->edit_post_location === 'under_title' ) {
+			add_action( 'edit_form_after_title', array( $this, 'render' ) );
 		}
-		$value = get_post_meta( $post->ID, $meta['key'], true );
-		?><label><h3 class="custom-field-label"><?php echo $meta['label'] ?></h3><?php
-		if ( $meta['type'] === 'text' ) {
-			?><input type="text" name="<?php echo 'custom_field_' . $meta['key'] ?>" value="<?php echo $value ?>"><?php
+		if ( $this->meta->edit_post_location === 'post_submitbox_misc_actions' ) {
+			add_action( 'post_submitbox_misc_actions', array( $this, 'render' ) );
+		}
+		add_action( 'save_post', array( $this, 'save_post' ) );
+	}
+	public function render() {
+		$post = get_post();
+		$value = get_post_meta( $post->ID, $this->meta->key, true );
+		?><label><h3 class="custom-field-label"><?php echo $this->meta->label ?></h3><?php
+		if ( $this->meta->type === 'text' ) {
+			?><input type="text" name="<?php echo 'custom_field_' . $this->meta->key ?>" value="<?php echo $value ?>"><?php
 		}
 		?></label><?php
 	}
-});
 
-/**
- * Add form UI in the post_submitbox_misc_actions
- */
-add_action( 'post_submitbox_misc_actions', function() {
-	$post = get_post();
-	$store = Meadow_Metadata_Store::getInstance();
-	if ( empty( $store->get_meta()['post'][$post->post_type] ) ) {
-		return;
-	}
-	$metas = $store->get_meta()['post'][$post->post_type];
-	foreach ( $metas as $meta ) {
-		if ( $meta->edit_post_location !== 'post_submitbox_misc_actions' ) {
+	public function save_post() {
+		$post = get_post();
+
+		// @todo look into enabling these intelligently.
+		// if ( wp_is_post_revision( $post_id ) )
+				// return;
+			// if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+				// return;
+
+		$store = Meadow_Metadata_Store::getInstance();
+		if ( empty( $store->get_meta()['post'][$post->post_type] ) ) {
 			return;
 		}
-		$value = get_post_meta( $post->ID, $meta['key'], true );
-		?><label><h3 class="custom-field-label"><?php echo $meta['label'] ?></h3><?php
-		if ( $meta['type'] === 'text' ) {
-			?><input type="text" name="<?php echo 'custom_field_' . $meta['key'] ?>" value="<?php echo $value ?>"><?php
+		$metas = $store->get_meta()['post'][$post->post_type];
+		foreach ( $metas as $meta ) {
+			if ( isset( $_REQUEST['custom_field_' . $meta->key] ) ) {
+				$value = $_REQUEST['custom_field_' . $meta->key];
+				update_post_meta( $post->ID, $meta->key, $value );
+			}
 		}
-		?></label><?php
-	}
-});
-
-/*
- * Save data from Edit Post screen.
- */
-add_action( 'save_post', function() {
-	$post = get_post();
-
-	// @todo look into enabling these intelligently.
-	// if ( wp_is_post_revision( $post_id ) )
-			// return;
-		// if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-			// return;
-
-	$store = Meadow_Metadata_Store::getInstance();
-	if ( empty( $store->get_meta()['post'][$post->post_type] ) ) {
-		return;
-	}
-	$metas = $store->get_meta()['post'][$post->post_type];
-	foreach ( $metas as $meta ) {
-		if ( isset( $_REQUEST['custom_field_' . $meta->key] ) ) {
-			$value = $_REQUEST['custom_field_' . $meta->key];
-			update_post_meta( $post->ID, $meta->key, $value );
-		}
-	}
-});
-
-/**
- * Add form UI in the Edit Post metabox
- */
-function meadow_output_metabox_contents() {
-	$post = get_post();
-	$store = Meadow_Metadata_Store::getInstance();
-	if ( empty( $store->get_meta()['post'][$post->post_type] ) ) {
-		return;
-	}
-	$metas = $store->get_meta()['post'][$post->post_type];
-	foreach ( $metas as $meta ) {
-		if ( $meta->edit_post_location !== 'metabox' ) {
-			return;
-		}
-		$value = get_post_meta( $post->ID, $meta->key, true );
-		?><label><h3 class="custom-field-label"><?php echo $meta->label ?></h3><?php
-		if ( $meta->type === 'text' ) {
-			?><input type="text" name="<?php echo 'custom_field_' . $meta->key ?>" value="<?php echo $value ?>"><?php
-		}
-		?></label><?php
 	}
 }
-/**
- * This is a container for UI controls on a post page.
- *
- * Need to think about how to make this more declarative, or at least how to bind
- * it to the registered metadata.
- */
-add_action('add_meta_boxes', function() {
-	add_meta_box(
-		'metabox-id',                       // ID
-		'Metabox Title',                    // title
-		'meadow_output_metabox_contents',   // render callback
-		'post',                             // screen
-		'advanced',                         // context
-		'default',                          // priority
-		null                                // callback_args
-	);
-});

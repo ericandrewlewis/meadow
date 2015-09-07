@@ -21,11 +21,13 @@ meadow_register_meta(
 		/*
 		 * Data sanitization callback.
 		 */
-		'sanitization_callback' => '__return_first_arg',
+		'sanitization_callback' => '__noop_sanitizer',
+		// The "type" of the data. This describes what kind of UI to offer the user.
 		'type' => 'text',
+		// Label for the UI control.
 		'label' => __( 'Subtitle' ),
 		// Where the field should render on the Edit Post screen. either 'under_title',
 		// 'post_submitbox_misc_actions', or somehow a meta box.
-		'edit_post_location' => 'metabox',
+		'edit_post_location' => 'post_submitbox_misc_actions',
 	)
 );

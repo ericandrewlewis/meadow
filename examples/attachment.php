@@ -21,8 +21,10 @@ meadow_register_meta(
 		/*
 		 * Data sanitization callback.
 		 */
-		'sanitization_callback' => '__return_first_arg',
+		'sanitization_callback' => '__noop_sanitizer',
+		// The "type" of the data. This describes what kind of UI to offer the user.
 		'type' => 'text',
+		// Label for the UI control.
 		'label' => __( 'Photo Credit' ),
 		// Need this cuz post.php for attachments is dumb?
 		'edit_post_location' => null,

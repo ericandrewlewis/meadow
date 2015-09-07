@@ -10,22 +10,21 @@ meadow_register_meta(
 		 */
 		'asset_type' => 'option',
 		// The key of the meta data.
-		'key' => 'disallow_',
+		'key' => 'disallow_something',
 		/*
 		 * edit_post is always required for postmeta, @see map_meta_cap() and think
 		 * about this some more. It's awkard that __return_true wouldn't work for any
 		 * user here.
 		 */
 		'authentication_callback' => '__return_true',
-		/*
-		 * Data sanitization callback.
-		 */
-		'sanitization_callback' => '__return_first_arg',
+		// Data sanitization callback.
+		'sanitization_callback' => '__noop_sanitizer',
+		// The "type" of the data. This describes what kind of UI to offer the user.
 		'type' => 'text',
-		'label' => __( 'Photo Credit' ),
-		// This is a bad example because "general" is the page and the section.
-		'page' => 'general',
+		// Label for the UI control.
+		'label' => __( 'Disallow Something' ),
 
+		'page' => 'general',
 		'section' => 'default',
 	)
 );
