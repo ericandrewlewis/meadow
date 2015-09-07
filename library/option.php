@@ -23,6 +23,9 @@ class Meadow_Option {
 	}
 }
 
+/**
+ * Set up a UI control for an option inside the wp-admin application.
+ */
 class Meadow_Option_UI_Control {
 	function __construct($args) {
 		$this->meta = $args['meta'];
