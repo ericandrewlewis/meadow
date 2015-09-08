@@ -16,7 +16,7 @@ This is creates a new instance of a meta object, e.g. [`Meadow_Postmeta`](https:
 puts it [in a global store of all registered fields](https://github.com/ericandrewlewis/meadow/blob/2951bbcda502d99fba7b9d60aeef3c2a3de950f8/library/class-metadata-store.php#L47)
 and creates a UI control, e.g. [`Meadow_Postmeta_UI_Control`](https://github.com/ericandrewlewis/meadow/blob/2951bbcda502d99fba7b9d60aeef3c2a3de950f8/library/post.php#L30).
 
-A meta object (e.g. [`Meadow_Postmeta`](https://github.com/ericandrewlewis/meadow/blob/2951bbcda502d99fba7b9d60aeef3c2a3de950f8/library/post.php#L8)`)
+A meta object (e.g. [`Meadow_Postmeta`](https://github.com/ericandrewlewis/meadow/blob/2951bbcda502d99fba7b9d60aeef3c2a3de950f8/library/post.php#L8))
 is responsible for defining the way it should
 handle data (sanitization, validation, and saving). When registered, instances are
 places in a global store. This pattern allows consumers like the REST API to
