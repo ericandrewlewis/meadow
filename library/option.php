@@ -11,7 +11,6 @@ class Meadow_Option {
 			$this->$key = $val;
 		}
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		new Meadow_Option_UI_Control( array( 'meta' => $this ) );
 	}
 
 	public function admin_init() {

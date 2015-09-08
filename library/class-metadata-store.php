@@ -43,8 +43,16 @@ class Meadow_Metadata_Store {
 	 */
 	private function register_post_meta( $args ) {
 		$meta = new Meadow_Postmeta( $args );
-		// Store the meta for display by UI and to describe to external APIs.
+		// Store the meta to describe to external APIs.
 		$this->meta['post'][$meta->post_type][] = $meta;
+
+		// Create a UI control for the metadata, which will decorate the wp-admin
+		// application with interface for the user to edit it.
+		if ( $meta->post_type === 'attachment' ) {
+			new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $meta ) );
+		} else {
+			new Meadow_Postmeta_UI_Control( array( 'meta' => $meta ) );
+		}
 	}
 
 	/**
@@ -52,7 +60,9 @@ class Meadow_Metadata_Store {
 	 */
 	private function register_option_meta( $args ) {
 		$meta = new Meadow_Option( $args );
-		// Store the meta for display by UI and to describe to external APIs.
+		// Store the meta to describe to external APIs.
 		$this->meta['option'][] = $meta;
+
+		new Meadow_Option_UI_Control( array( 'meta' => $meta ) );
 	}
 }

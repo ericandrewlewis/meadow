@@ -20,12 +20,6 @@ class Meadow_Postmeta {
 		foreach ( $args as $key => $val ) {
 			$this->$key = $val;
 		}
-		if ( $this->post_type === 'attachment' ) {
-			new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $this ) );
-		} else {
-			new Meadow_Postmeta_UI_Control( array( 'meta' => $this ) );
-		}
-
 	}
 }
 
