@@ -28,7 +28,8 @@ class Meadow_Metadata_Store {
 	 */
 	public function register_meta( $args ) {
 		// Call the asset-type specific registration routine.
-		call_user_func( array( $this, 'register_' . $args['asset_type'] . '_meta' ), $args );
+		$meta = call_user_func( array( $this, 'register_' . $args['asset_type'] . '_meta' ), $args );
+		return $meta;
 	}
 
 	/**
@@ -40,19 +41,14 @@ class Meadow_Metadata_Store {
 
 	/**
 	 * Register postmeta for any post type.
+	 *
+	 * @return Meadow_Postmeta
 	 */
 	private function register_post_meta( $args ) {
 		$meta = new Meadow_Postmeta( $args );
 		// Store the meta to describe to external APIs.
 		$this->meta['post'][$meta->post_type][] = $meta;
-
-		// Create a UI control for the metadata, which will decorate the wp-admin
-		// application with interface for the user to edit it.
-		if ( $meta->post_type === 'attachment' ) {
-			new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $meta ) );
-		} else {
-			new Meadow_Postmeta_UI_Control( array( 'meta' => $meta ) );
-		}
+		return $meta;
 	}
 
 	/**
@@ -62,7 +58,6 @@ class Meadow_Metadata_Store {
 		$meta = new Meadow_Option( $args );
 		// Store the meta to describe to external APIs.
 		$this->meta['option'][] = $meta;
-
-		new Meadow_Option_UI_Control( array( 'meta' => $meta ) );
+		return $meta;
 	}
 }

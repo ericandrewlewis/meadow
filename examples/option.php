@@ -1,5 +1,5 @@
 <?php
-meadow_register_meta(
+$meta = meadow_register_meta(
 	array(
 		/*
 		 * Posts, comments, users, settings are top-level asset types.
@@ -34,3 +34,5 @@ meadow_register_meta(
 		'section' => 'default',
 	)
 );
+
+new Meadow_Option_UI_Control( array( 'meta' => $meta ) );

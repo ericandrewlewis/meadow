@@ -20,5 +20,6 @@ function __noop_sanitizer( $arg ) {
  */
 function meadow_register_meta( $args ) {
 	$store = Meadow_Metadata_Store::getInstance();
-	$store->register_meta( $args );
+	$meta = $store->register_meta( $args );
+	return $meta;
 }

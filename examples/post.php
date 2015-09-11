@@ -1,5 +1,5 @@
 <?php
-meadow_register_meta(
+$meta = meadow_register_meta(
 	array(
 		/*
 		 * Posts, comments, users, settings are top-level asset types.
@@ -38,3 +38,11 @@ meadow_register_meta(
 		'edit_post_location' => 'post_submitbox_misc_actions',
 	)
 );
+
+// Create a UI control for the metadata, which will decorate the wp-admin
+// application with interface for the user to edit it.
+if ( $meta->post_type === 'attachment' ) {
+	new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $meta ) );
+} else {
+	new Meadow_Postmeta_UI_Control( array( 'meta' => $meta ) );
+}
