@@ -10,9 +10,9 @@ require( 'library/class-metadata-store.php' );
 require( 'library/functions.php' );
 
 // Library code for asset types
-require( 'library/attachment.php' );
 require( 'library/post/class-meadow-postmeta.php' );
 require( 'library/post/class-meadow-postmeta-control.php' );
+require( 'library/post/class-meadow-attachmentmeta-control.php' );
 require( 'library/option.php' );
 
 $include_examples = true;
