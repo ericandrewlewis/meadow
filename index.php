@@ -11,8 +11,8 @@ require( 'library/functions.php' );
 
 // Library code for asset types
 require( 'library/post/class-meadow-postmeta.php' );
-require( 'library/post/class-meadow-postmeta-control.php' );
-require( 'library/post/class-meadow-attachmentmeta-control.php' );
+require( 'library/post/class-meadow-postmeta-ui-control.php' );
+require( 'library/post/class-meadow-attachmentmeta-ui-control.php' );
 require( 'library/option/class-meadow-option.php' );
 require( 'library/option/class-meadow-option-ui-control.php' );
 
