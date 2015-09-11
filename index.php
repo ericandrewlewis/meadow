@@ -13,7 +13,8 @@ require( 'library/functions.php' );
 require( 'library/post/class-meadow-postmeta.php' );
 require( 'library/post/class-meadow-postmeta-control.php' );
 require( 'library/post/class-meadow-attachmentmeta-control.php' );
-require( 'library/option.php' );
+require( 'library/option/class-meadow-option.php' );
+require( 'library/option/class-meadow-option-ui-control.php' );
 
 $include_examples = true;
 if ( $include_examples ) {
