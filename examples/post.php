@@ -30,19 +30,12 @@ $meta = meadow_register_meta(
 
 		// Label for the UI control.
 		'label' => __( 'Subtitle' ),
-
-		/*
-		 * Where the field should render on the Edit Post screen. either 'under_title',
-		 * 'post_submitbox_misc_actions', or somehow a meta box.
-		 */
-		'edit_post_location' => 'post_submitbox_misc_actions',
 	)
 );
 
-// Create a UI control for the metadata, which will decorate the wp-admin
-// application with interface for the user to edit it.
-if ( $meta->post_type === 'attachment' ) {
-	new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $meta ) );
-} else {
-	new Meadow_Postmeta_UI_Control( array( 'meta' => $meta ) );
-}
+// Create a UI control for the metadata.
+$control = new Meadow_Postmeta_UI_Control( array( 'meta' => $meta ) );
+
+// Stuff the control into a section.
+$section = new Meadow_Postmeta_UI_Section( array( 'location' => 'metabox' ) );
+$section->add_control( $control );

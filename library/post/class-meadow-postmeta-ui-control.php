@@ -6,14 +6,9 @@
 class Meadow_Postmeta_UI_Control {
 	function __construct($args) {
 		$this->meta = $args['meta'];
-		if ( $this->meta->edit_post_location === 'under_title' ) {
-			add_action( 'edit_form_after_title', array( $this, 'render' ) );
-		}
-		if ( $this->meta->edit_post_location === 'post_submitbox_misc_actions' ) {
-			add_action( 'post_submitbox_misc_actions', array( $this, 'render' ) );
-		}
 		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
+
 	public function render() {
 		$post = get_post();
 		$value = get_post_meta( $post->ID, $this->meta->key, true );

@@ -18,7 +18,13 @@ class Meadow_Option_UI_Control {
 		global $new_whitelist_options;
 		$new_whitelist_options[ $this->meta->page ][] = $this->meta->key;
 
-		// Add the thing that will output the field in the Settings page form.
+		/*
+		 * Add the thing that will output the field in the Settings page form.
+		 * This essentially does what the section object is doing in the post meta
+		 * part of the library. Can we extract this into a section? Not sure because
+		 * we need to define the save functionality above including the page to save
+		 * on. Maybe there's a lower-level manner to register the whitelist?
+		 */
 		add_settings_field(
 			$this->meta->key,
 			$this->meta->label,

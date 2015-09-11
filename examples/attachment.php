@@ -1,5 +1,5 @@
 <?php
-meadow_register_meta(
+$meta = meadow_register_meta(
 	array(
 		/*
 		 * Asset types are recursive, use ":" as a separator to keep this syntax brief.
@@ -30,3 +30,5 @@ meadow_register_meta(
 		'edit_post_location' => null,
 	)
 );
+
+$control = new Meadow_Attachmentmeta_UI_Control( array( 'meta' => $meta ) );
