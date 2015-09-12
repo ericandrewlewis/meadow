@@ -11,6 +11,9 @@ class Meadow_Postmeta_UI_Control {
 		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
 
+	/**
+	 * Render the control.
+	 */
 	public function render() {
 		$post = get_post();
 		$value = get_post_meta( $post->ID, $this->meta->key, true );
@@ -21,6 +24,9 @@ class Meadow_Postmeta_UI_Control {
 		?></label><?php
 	}
 
+	/**
+	 * Save the post meta on the `save_post` hook.
+	 */
 	public function save_post() {
 		$post = get_post();
 
@@ -29,16 +35,9 @@ class Meadow_Postmeta_UI_Control {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
 			return;
 
-		$store = Meadow_Metadata_Store::getInstance();
-		if ( empty( $store->get_meta()['post'][$post->post_type] ) ) {
-			return;
-		}
-		$metas = $store->get_meta()['post'][$post->post_type];
-		foreach ( $metas as $meta ) {
-			if ( isset( $_REQUEST['custom_field_' . $meta->key] ) ) {
-				$value = $_REQUEST['custom_field_' . $meta->key];
-				update_post_meta( $post->ID, $meta->key, $value );
-			}
+		if ( isset( $_REQUEST['custom_field_' . $this->meta->key] ) ) {
+			$value = $_REQUEST['custom_field_' . $this->meta->key];
+			update_post_meta( $post->ID, $this->meta->key, $value );
 		}
 	}
 }
