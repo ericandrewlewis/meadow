@@ -20,19 +20,20 @@ $meta = meadow_register_meta(
 
 		// Data sanitization callback.
 		'sanitization_callback' => '__noop_sanitizer',
-
-		// The "type" of the data. This describes what kind of UI to offer the user.
-		'type' => 'text',
-
-		// Label for the UI control.
-		'label' => __( 'Disallow Something' ),
-
-		// The settings page for the control.
-		'page' => 'general',
-
-		// The settings section for the control.
-		'section' => 'default',
 	)
 );
 
-new Meadow_Option_UI_Control( array( 'meta' => $meta ) );
+new Meadow_Option_UI_Control( array(
+	'meta' => $meta,
+	// The "type" of the data. This describes what kind of UI to offer the user.
+	'type' => 'text',
+
+	// Label for the UI control.
+	'label' => __( 'Disallow Something' ),
+
+	// The settings page for the control.
+	'page' => 'general',
+
+	// The settings section for the control.
+	'section' => 'default',
+) );

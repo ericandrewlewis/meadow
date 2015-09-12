@@ -4,7 +4,9 @@
  */
 class Meadow_Option_UI_Control {
 	function __construct($args) {
-		$this->meta = $args['meta'];
+		foreach ( $args as $key => $val ) {
+			$this->$key = $val;
+		}
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 	}
 
@@ -16,7 +18,7 @@ class Meadow_Option_UI_Control {
 		 * This is an alternative to calling register_setting() which does too much.
 		 */
 		global $new_whitelist_options;
-		$new_whitelist_options[ $this->meta->page ][] = $this->meta->key;
+		$new_whitelist_options[ $this->page ][] = $this->meta->key;
 
 		/*
 		 * Add the thing that will output the field in the Settings page form.
@@ -27,16 +29,16 @@ class Meadow_Option_UI_Control {
 		 */
 		add_settings_field(
 			$this->meta->key,
-			$this->meta->label,
+			$this->label,
 			array( $this, 'render' ),
-			$this->meta->page,
-			$this->meta->section
+			$this->page,
+			$this->section
 		);
 	}
 
 	public function render() {
 		$value = get_option( $this->meta->key );
-		if ( $this->meta->type === 'text' ) {
+		if ( $this->type === 'text' ) {
 			?><input type="text" name="<?php echo $this->meta->key ?>" value="<?php echo esc_attr( $value ) ?>"><?php
 		}
 	}

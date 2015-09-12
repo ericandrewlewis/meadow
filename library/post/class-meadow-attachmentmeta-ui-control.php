@@ -4,7 +4,9 @@
  */
 class Meadow_Attachmentmeta_UI_Control {
 	function __construct($args) {
-		$this->meta = $args['meta'];
+		foreach ( $args as $key => $val ) {
+			$this->$key = $val;
+		}
 		add_filter( 'attachment_fields_to_edit', array( $this, 'attachment_fields_to_edit' ), 10, 2 );
 		add_action( 'edit_attachment', array( $this, 'edit_attachment' ) );
 	}
@@ -19,7 +21,7 @@ class Meadow_Attachmentmeta_UI_Control {
 		// Namespace the field name to avoid any collisions with existing fields.
 		$form_fields['custom_field_' . $this->meta->key] = array(
 			'value' => $value,
-			'label' => $this->meta->label,
+			'label' => $this->label,
 			// todo think about this:
 			'helps' => __( 'Person who took the picture' )
 		);

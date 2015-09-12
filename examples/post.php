@@ -24,17 +24,19 @@ $meta = meadow_register_meta(
 		 * Data sanitization callback.
 		 */
 		'sanitization_callback' => '__noop_sanitizer',
-
-		// The "type" of the data. This describes what kind of UI to offer the user.
-		'type' => 'text',
-
-		// Label for the UI control.
-		'label' => __( 'Subtitle' ),
 	)
 );
 
 // Create a UI control for the metadata.
-$control = new Meadow_Postmeta_UI_Control( array( 'meta' => $meta ) );
+$control = new Meadow_Postmeta_UI_Control( array(
+	'meta' => $meta,
+
+	// The "type" of the control. This describes what kind of UI to offer the user.
+	'type' => 'text',
+
+	// Label for the UI control.
+	'label' => __( 'Subtitle' ),
+) );
 
 // Stuff the control into a section.
 $section = new Meadow_Postmeta_UI_Section( array( 'location' => 'metabox' ) );
